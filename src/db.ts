@@ -1,4 +1,4 @@
-import { AlumnoDTO } from '../dto/alumno.dto';
+import { AlumnoDTO } from './dto/alumno.dto';
 import { Pool } from 'pg';
 
 // Configuración de la conexión a la base de datos
