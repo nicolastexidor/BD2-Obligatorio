@@ -18,12 +18,15 @@ Para configurar y ejecutar este proyecto, sigue los siguientes pasos:
 
    ```npm install```
 
+2. Modificar config/db.ts
 
-2. Compila el código TypeScript a JavaScript ejecutando:
+   En el objeto config cambiar los datos con los que corresponden a tu local
+
+3. Compila el código TypeScript a JavaScript ejecutando:
 
 ```npx tsc```
 
-3. Ejecutar la aplicación
+4. Ejecutar la aplicación
 
 Finalmente, ejecuta el archivo compilado:
 
