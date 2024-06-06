@@ -1,20 +1,20 @@
 export class AlumnoDTO {
-    public CI: string;
-    public Nombre: string;
-    public EqCampeon: string;
-    public EqSubcampeon: string;
-    public Carrera: string;
-    public Puntos: number;
-    public Contraseña: string;
+    public ci: string;
+    public nombre: string;
+    public eqCampeon: string;
+    public eqSubcampeon: string;
+    public carrera: string;
+    public puntos: number;
+    public contraseña: string;
   
-    constructor(CI: string, Nombre: string, EqCampeon: string, EqSubcampeon: string, Carrera: string, Puntos: number, Contraseña: string) {
-      this.CI = CI;
-      this.Nombre = Nombre;
-      this.EqCampeon = EqCampeon;
-      this.EqSubcampeon = EqSubcampeon;
-      this.Carrera = Carrera;
-      this.Puntos = Puntos;
-      this.Contraseña = Contraseña;
+    constructor(CI: string, Nombre: string, EqCampeon: string, EqSubcampeon: string, Carrera: string, Puntos: number, contraseña: string) {
+      this.ci = CI;
+      this.nombre = Nombre;
+      this.eqCampeon = EqCampeon;
+      this.eqSubcampeon = EqSubcampeon;
+      this.carrera = Carrera;
+      this.puntos = Puntos;
+      this.contraseña = contraseña;
     }
 }
   
