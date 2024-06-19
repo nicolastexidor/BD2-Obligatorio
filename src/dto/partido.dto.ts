@@ -1,18 +1,18 @@
 export class PartidoDTO {
     public eqloc: string;
     public eqvis: string;
-    public fechahora: Date;
+    public fechahora: string;
     public golesloc: number;
     public golesvis: number;
-    public estadio: string;
+    public estadioId: number;
   
-    constructor(EqLoc: string, EqVis: string, FechaHora: Date, GolesLoc: number, GolesVis: number, Estadio: string) {
+    constructor(EqLoc: string, EqVis: string, FechaHora: string, GolesLoc: number, GolesVis: number, EstadioId: number) {
       this.eqloc = EqLoc;
       this.eqvis = EqVis;
       this.fechahora = FechaHora;
       this.golesloc = GolesLoc;
       this.golesvis = GolesVis;
-      this.estadio = Estadio;
+      this.estadioId = EstadioId;
     }
 }
   

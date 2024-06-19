@@ -4,6 +4,8 @@ import prediccionRoutes from './routes/prediccion.routes';
 import partidoRoutes from './routes/partido.routes';
 import equipoRoutes from './routes/equipo.routes';
 import adminRoutes from './routes/admin.routes';
+import carreraRoutes from './routes/carrera.routes';
+import estadioRoutes from './routes/estadio.routes';
 
 const app = express();
 const PORT = 8080;
@@ -14,6 +16,8 @@ app.use('/api/prediccion', prediccionRoutes);
 app.use('/api/partido', partidoRoutes);
 app.use('/api/equipo', equipoRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/carrera', carreraRoutes);
+app.use('/api/estadio', estadioRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

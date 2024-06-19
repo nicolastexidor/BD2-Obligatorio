@@ -1,11 +1,12 @@
 import { Router } from 'express';
+import { addCarrera, getCarreras } from '../controller/carrera.controller';
 import { authenticateJWT } from '../middleware/authenticateJWT.middleware';
-import { addEquipo, getEquipos } from '../controller/equipo.controller';
 import { checkAdmin } from '../middleware/checkAdmin.middleware';
+
 const router = Router();
 
-router.post('/add', authenticateJWT, checkAdmin, addEquipo);
-router.get('/', getEquipos);
+router.get('/', getCarreras);
+router.post('/add', authenticateJWT, checkAdmin, addCarrera);
 
 
 export default router;

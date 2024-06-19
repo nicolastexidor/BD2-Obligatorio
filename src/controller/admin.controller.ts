@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import { jwtKey } from '../constants/constants';
 import { AdministradorDTO } from '../dto/administrador.dto';
 import { INVALID_CREDENTIALS_ERROR, INVALID_TOKEN_ERROR, USER_NOT_AUTHORIZED_ERROR, USER_NOT_FOUND_ERROR } from '../constants/errors';
+import { RegisterAdminDTO } from '../dto/request/register.admin.dto';
 
 
 export const adminLogin = async (req: Request, res: Response): Promise<void> => {
@@ -31,20 +32,11 @@ export const adminLogin = async (req: Request, res: Response): Promise<void> => 
 
 export const registerAdmin = async (req: Request, res: Response): Promise<void> => {
     const ciAdmin = req.ci;
-    if (!ciAdmin) {
-        res.status(401).send({message: INVALID_TOKEN_ERROR});
-        return;
-    }
     const { ci, nombre, contraseña } = req.body;
+    const adminData = new RegisterAdminDTO(ci, nombre, contraseña);
     try {
-        const admin = await client.query('SELECT * FROM administrador WHERE ci = $1', [ciAdmin]);
-        if(admin.rows.length === 0){
-            res.status(401).send({message: USER_NOT_AUTHORIZED_ERROR});
-            return;
-        }
-
-        const hash = await bcrypt.hash(contraseña, 10);
-        const result = await client.query('INSERT INTO administrador (ci, nombre, contraseña) VALUES ($1, $2, $3)', [ci, nombre, hash]);
+        const hash = await bcrypt.hash(adminData.contraseña, 10);
+        const result = await client.query('INSERT INTO administrador (ci, nombre, contraseña) VALUES ($1, $2, $3)', [adminData.ci, adminData.nombre, hash]);
         const token = jwt.sign({ ci }, jwtKey);
         res.status(201).send({message: 'Admin creado', token});
     } catch (error) {

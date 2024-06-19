@@ -6,6 +6,7 @@ import { LeaderBoardResponseDTO } from '../dto/response/leaderBoard.response.dto
 import jwt from 'jsonwebtoken';
 import { jwtKey } from '../constants/constants';
 import { INVALID_CREDENTIALS_ERROR, USER_ALREADY_EXISTS_ERROR, USER_NOT_FOUND_ERROR } from '../constants/errors';
+import { RegisterAlumnoDTO } from '../dto/request/register.alumno.dto';
 
 export const getAlumnos = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -29,16 +30,17 @@ export const getAlumnos = async (req: Request, res: Response): Promise<void> => 
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { ci, nombre, eqcampeon, eqsubcampeon, carrera, contraseña } = req.body;
+  const alumnoData = new RegisterAlumnoDTO(ci, nombre, eqcampeon, eqsubcampeon, carrera, contraseña);
   try {
-    const resultAlumnos = await client.query('SELECT * FROM Alumno WHERE ci = $1', [ci]);
-    const resultAdmins = await client.query('SELECT * FROM Administrador WHERE ci = $1', [ci]);
+    const resultAlumnos = await client.query('SELECT * FROM Alumno WHERE ci = $1', [alumnoData.ci]);
+    const resultAdmins = await client.query('SELECT * FROM Administrador WHERE ci = $1', [alumnoData.ci]);
     if (resultAlumnos.rows.length > 0 || resultAdmins.rows.length > 0) {
       res.status(400).send({message: USER_ALREADY_EXISTS_ERROR});
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(contraseña, 10);
-    const result = await client.query('INSERT INTO Alumno (ci, nombre, eqcampeon, eqsubcampeon, carrera, puntos, contraseña) VALUES ($1, $2, $3, $4, $5, 0, $6)', [ci, nombre, eqcampeon, eqsubcampeon, carrera, hashedPassword]);
+    const hashedPassword = await bcrypt.hash(alumnoData.contraseña, 10);
+    const result = await client.query('INSERT INTO Alumno (ci, nombre, eqcampeon, eqsubcampeon, carrera, puntos, contraseña) VALUES ($1, $2, $3, $4, $5, 0, $6)', [alumnoData.ci, alumnoData.nombre, alumnoData.eqcampeon, alumnoData.eqsubcampeon, alumnoData.carrera, hashedPassword]);
     const token = jwt.sign({ ci }, jwtKey);
     res.status(201).send({ message: 'Alumno creado', token });
   } catch (error) {
@@ -57,7 +59,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     const alumno: AlumnoDTO = result.rows[0];
-    console.log(alumno);
     const validPassword = await bcrypt.compare(contraseña, alumno.contraseña);
     if (validPassword) {
       const token = jwt.sign({ ci }, jwtKey);

@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { authenticateJWT } from '../middleware/authenticateJWT.middleware';
-import { addEquipo, getEquipos } from '../controller/equipo.controller';
+import { addEstadio, getEstadios } from '../controller/estadio.controller';
 import { checkAdmin } from '../middleware/checkAdmin.middleware';
 const router = Router();
 
-router.post('/add', authenticateJWT, checkAdmin, addEquipo);
-router.get('/', getEquipos);
+router.post('/add', authenticateJWT, checkAdmin, addEstadio);
+router.get('/', getEstadios);
 
 
 export default router;

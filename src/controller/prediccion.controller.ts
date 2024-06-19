@@ -44,10 +44,6 @@ export const addPrediccion = async (req: Request, res: Response): Promise<void> 
 
 export const getPredicciones = async (req: Request, res: Response): Promise<void> => {
     const ci = req.ci;
-    if (!ci) {
-        res.status(401).send({message: INVALID_TOKEN_ERROR});
-        return;
-    }
     try {
         const result = await client.query('SELECT * FROM Prediccion WHERE ciAlumno = $1', [ci]);
         if (result.rows.length === 0) {
@@ -63,10 +59,6 @@ export const getPredicciones = async (req: Request, res: Response): Promise<void
 
 export const updatePrediccion = async (req: Request, res: Response): Promise<void> => {
     const ci = req.ci;
-    if (!ci) {
-        res.status(401).send({message: INVALID_TOKEN_ERROR});
-        return;
-    }
     const { eqLoc, eqVis, golesLoc, golesVis, fechaHora } = req.body;
     try {
         const existingPrediction = await client.query(
@@ -90,5 +82,34 @@ export const updatePrediccion = async (req: Request, res: Response): Promise<voi
     } catch (error) {
         console.error('Error al modificar la predicción:', error);
         res.status(500).send('Error al modificar la predicción');
+    }
+}
+
+export const updateFinal = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const {eqSubCampeon, eqCampeon} = req.body;
+        const result = await client.query(
+            'SELECT * FROM Partido WHERE golesloc IS NULL AND golesvis IS NULL'
+        );
+        if (result.rows.length > 0) {
+            res.status(400).send('Aún hay partidos sin resultados');
+            return;
+        }
+        const alumnos = await client.query('SELECT * FROM Alumno');
+        for(let i = 0; i < alumnos.rows.length; i++){
+            const alumno = alumnos.rows[i];
+            let points = 0;
+            if(alumno.eqsubcampeon === eqSubCampeon){
+                points += 5;
+            }
+            if(alumno.eqcampeon === eqCampeon){
+                points += 10;
+            }
+            await client.query('UPDATE Alumno SET puntos = puntos + $1 WHERE ci = $2', [points, alumno.ci]);
+        }
+        res.status(200).send('Resultados finales actualizados');
+    } catch (error) {
+        console.error('Error al actualizar los resultados:', error);
+        res.status(500).send('Error al actualizar los resultados');
     }
 }
