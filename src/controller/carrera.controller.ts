@@ -12,6 +12,21 @@ export const getCarreras = async (req: Request, res: Response) => {
     }
 }
 
+export const getCarreraById = async (req: Request, res: Response) => { 
+    try {
+        const id = req.params.id;
+        const result = await client.query('SELECT * FROM Carrera WHERE id = $1', [id]);
+        if (result.rows.length === 0) {
+            res.status(404).send('Carrera no encontrada');
+            return;
+        }
+        res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error('Error al obtener la carrera:', error);
+        res.status(500).send('Error al obtener la carrera');
+    }
+}
+
 export const addCarrera = async (req: Request, res: Response) => {
     try {
         const { id, nombre } = req.body;
