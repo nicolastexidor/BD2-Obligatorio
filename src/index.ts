@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import alumnoRoutes from './routes/alumno.routes';
 import prediccionRoutes from './routes/prediccion.routes';
 import partidoRoutes from './routes/partido.routes';
@@ -10,7 +11,9 @@ import estadioRoutes from './routes/estadio.routes';
 const app = express();
 const PORT = 8080;
 
+app.use(cors());
 app.use(express.json());
+
 app.use('/api/alumnos', alumnoRoutes);
 app.use('/api/prediccion', prediccionRoutes);
 app.use('/api/partido', partidoRoutes);
