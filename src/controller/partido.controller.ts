@@ -18,7 +18,7 @@ export const addPartido = async (req: Request, res: Response): Promise<void> => 
 
 export const getPartidos = async (req: Request, res: Response): Promise<void> => {
     try {
-        const result = await client.query('SELECT * FROM Partido');
+        const result = await client.query('SELECT * FROM Partido ORDER BY FechaHora');
         res.status(200).json(result.rows);
     } catch (error) {
         console.error('Error al obtener los partidos:', error);
