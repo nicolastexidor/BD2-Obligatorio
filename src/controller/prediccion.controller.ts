@@ -35,10 +35,10 @@ export const addPrediccion = async (req: Request, res: Response): Promise<void> 
         const result = await client.query(
             'INSERT INTO Prediccion (cialumno, puntosotorgados, eqloc, eqvis, golesloc, golesvis, fechahora) VALUES ($1, $2, $3, $4, $5, $6, $7)',
             [prediccion.CIAlumno, prediccion.PuntosOtorgados, prediccion.eqLoc, prediccion.eqVis, prediccion.GolesLoc, prediccion.GolesVis, prediccion.FechaHora]);
-        res.status(201).send('Predicción creada');
+        res.status(201).send({message: 'Predicción creada'});
     } catch (error) {
         console.error('Error al crear la predicción:', error);
-        res.status(500).send('Error al crear la predicción');
+        res.status(500).send({message: 'Error al crear la predicción'});
     }
 }
 
