@@ -9,10 +9,10 @@ export const addPartido = async (req: Request, res: Response): Promise<void> => 
         const result = await client.query(
             'INSERT INTO Partido (eqloc, eqvis, golesloc, golesvis, fechahora, estadio) VALUES ($1, $2, $3, $4, $5, $6)',
             [partido.eqloc, partido.eqvis, partido.golesloc, partido.golesvis, partido.fechahora, partido.estadioId]);
-        res.status(201).send('Partido creado');
+        res.status(201).send({message: 'Partido creado'});
     } catch (error) {
         console.error('Error al crear el partido:', error);
-        res.status(500).send('Error al crear el partido');
+        res.status(500).send({message: 'Error al crear el partido'});
     }
 }
 
@@ -35,7 +35,7 @@ export const updatePartido = async (req: Request, res: Response): Promise<void> 
             [eqLoc, eqVis, golesLoc, golesVis, fechaHora]);
         
         if(result.rowCount === 0){
-            res.status(400).send('No se puede actualizar el partido, no existe o ya tiene resultado');
+            res.status(400).send({message: 'No se puede actualizar el partido, no existe o ya tiene resultado'});
             return;
         }
         //Update predictions
@@ -51,9 +51,9 @@ export const updatePartido = async (req: Request, res: Response): Promise<void> 
             await client.query('UPDATE Prediccion SET puntosotorgados = $1 WHERE ciAlumno = $2 AND eqloc = $3 AND eqvis = $4 AND fechahora = $5', [points, prediction.cialumno, eqLoc, eqVis, fechaHora]);
             await client.query('UPDATE Alumno SET puntos = puntos + $1 WHERE ci = $2', [points, prediction.cialumno]);
         }
-        res.status(200).send('Partido actualizado');
+        res.status(200).send({message: 'Partido actualizado'});
     } catch (error) {
         console.error('Error al actualizar el partido:', error);
-        res.status(500).send('Error al actualizar el partido');
+        res.status(500).send({message: 'Error al actualizar el partido'});
     }
 };
