@@ -19,7 +19,7 @@ export const adminLogin = async (req: Request, res: Response): Promise<void> => 
       const admin: AdministradorDTO = result.rows[0];
       const validPassword = await bcrypt.compare(contraseña, admin.contraseña);
       if (validPassword) {
-        const token = jwt.sign({ ci }, jwtKey);
+        const token = jwt.sign({ ci, role: 'admin' }, jwtKey);
         res.status(200).json({ message: 'Admin logueado', token });
       } else {
         res.status(401).send({message: INVALID_CREDENTIALS_ERROR});
@@ -37,7 +37,7 @@ export const registerAdmin = async (req: Request, res: Response): Promise<void> 
     try {
         const hash = await bcrypt.hash(adminData.contraseña, 10);
         const result = await client.query('INSERT INTO administrador (ci, nombre, contraseña) VALUES ($1, $2, $3)', [adminData.ci, adminData.nombre, hash]);
-        const token = jwt.sign({ ci }, jwtKey);
+        const token = jwt.sign({ ci, role: 'admin' }, jwtKey);
         res.status(201).send({message: 'Admin creado', token});
     } catch (error) {
         console.error('Error al crear el admin:', error);

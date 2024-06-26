@@ -4,7 +4,7 @@ import { AlumnoDTO } from '../dto/alumno.dto';
 import bcrypt from 'bcrypt';
 import { LeaderBoardResponseDTO } from '../dto/response/leaderBoard.response.dto';
 import jwt from 'jsonwebtoken';
-import { jwtKey } from '../constants/constants';
+import { alumnoRole, jwtKey } from '../constants/constants';
 import { INVALID_CREDENTIALS_ERROR, USER_ALREADY_EXISTS_ERROR, USER_NOT_FOUND_ERROR } from '../constants/errors';
 import { RegisterAlumnoDTO } from '../dto/request/register.alumno.dto';
 
@@ -40,8 +40,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     }
 
     const hashedPassword = await bcrypt.hash(alumnoData.contraseña, 10);
-    const result = await client.query('INSERT INTO Alumno (ci, nombre, eqcampeon, eqsubcampeon, carrera, puntos, contraseña) VALUES ($1, $2, $3, $4, $5, 0, $6)', [alumnoData.ci, alumnoData.nombre, alumnoData.eqcampeon, alumnoData.eqsubcampeon, alumnoData.carrera, hashedPassword]);
-    const token = jwt.sign({ ci }, jwtKey);
+    const result = await client.query(
+      'INSERT INTO Alumno (ci, nombre, eqcampeon, eqsubcampeon, carrera, puntos, contraseña) VALUES ($1, $2, $3, $4, $5, 0, $6)', 
+      [alumnoData.ci, alumnoData.nombre, alumnoData.eqcampeon, alumnoData.eqsubcampeon, alumnoData.carrera, hashedPassword]);
+    const token = jwt.sign({ ci, role: alumnoRole }, jwtKey);
     res.status(201).send({ message: 'Alumno creado', token });
   } catch (error) {
     console.error('Error al crear el alumno:', error);
@@ -61,7 +63,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const alumno: AlumnoDTO = result.rows[0];
     const validPassword = await bcrypt.compare(contraseña, alumno.contraseña);
     if (validPassword) {
-      const token = jwt.sign({ ci }, jwtKey);
+      const token = jwt.sign({ ci, role: alumnoRole }, jwtKey);
       res.status(200).json({ message: 'Alumno logueado', token });
     } else {
       res.status(401).send({message: INVALID_CREDENTIALS_ERROR});

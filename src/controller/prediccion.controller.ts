@@ -66,22 +66,22 @@ export const updatePrediccion = async (req: Request, res: Response): Promise<voi
             [ci, eqLoc, eqVis, fechaHora]
         );
         if (existingPrediction.rows.length === 0) {
-            res.status(400).send('No existe una predicción del alumno para este partido');
+            res.status(400).send({message: 'No existe una predicción del alumno para este partido'});
             return;
         }
         const prediction = existingPrediction.rows[0];
         if(moment(moment.now()).isAfter(moment(prediction.fechahora).subtract(1, 'hours'))){
-            res.status(400).send('Ya no se pueden modificar predicciones para este partido');
+            res.status(400).send({message: 'Ya no se pueden modificar predicciones para este partido'});
             return;
         }
         const result = await client.query(
             'UPDATE Prediccion SET golesloc = $4, golesvis = $5 WHERE ciAlumno = $1 AND eqloc = $2 AND eqvis = $3 AND fechahora = $6',
             [ci, eqLoc, eqVis, golesLoc, golesVis, fechaHora]
         );
-        res.status(200).send('Predicción modificada');
+        res.status(200).send({message: 'Predicción modificada'});
     } catch (error) {
         console.error('Error al modificar la predicción:', error);
-        res.status(500).send('Error al modificar la predicción');
+        res.status(500).send({message: 'Error al modificar la predicción'});
     }
 }
 
@@ -92,7 +92,7 @@ export const updateFinal = async (req: Request, res: Response): Promise<void> =>
             'SELECT * FROM Partido WHERE golesloc IS NULL AND golesvis IS NULL'
         );
         if (result.rows.length > 0) {
-            res.status(400).send('Aún hay partidos sin resultados');
+            res.status(400).send({message: 'Aún hay partidos sin resultados'});
             return;
         }
         const alumnos = await client.query('SELECT * FROM Alumno');
@@ -107,7 +107,7 @@ export const updateFinal = async (req: Request, res: Response): Promise<void> =>
             }
             await client.query('UPDATE Alumno SET puntos = puntos + $1 WHERE ci = $2', [points, alumno.ci]);
         }
-        res.status(200).send('Resultados finales actualizados');
+        res.status(200).send({message: 'Resultados finales actualizados'});
     } catch (error) {
         console.error('Error al actualizar los resultados:', error);
         res.status(500).send('Error al actualizar los resultados');

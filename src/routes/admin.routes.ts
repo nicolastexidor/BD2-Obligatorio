@@ -6,5 +6,8 @@ const router = Router();
 
 router.post('/register', authenticateJWT, checkAdmin, registerAdmin);
 router.post('/login', adminLogin);
+router.get('/isAdmin', authenticateJWT, checkAdmin, (req, res) => {
+    res.status(200).send({ message: 'Admin Role' });
+});
 
 export default router;
