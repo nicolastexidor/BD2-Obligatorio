@@ -43,7 +43,7 @@ export const updatePartido = async (req: Request, res: Response): Promise<void> 
         for(let i = 0; i < predictions.rows.length; i++){
             const prediction = predictions.rows[i];
             let points = 0;
-            if(prediction.golesloc === golesLoc && prediction.golesvis === golesVis){
+            if(prediction.golesloc == golesLoc && prediction.golesvis == golesVis){
                 points = 4;
             }else if((prediction.golesloc > prediction.golesvis && golesLoc > golesVis) || (prediction.golesloc < prediction.golesvis && golesLoc < golesVis) || (prediction.golesloc === prediction.golesvis && golesLoc === golesVis)){
                 points = 2;
