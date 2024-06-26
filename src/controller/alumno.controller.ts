@@ -46,8 +46,8 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign({ ci, role: alumnoRole }, jwtKey);
     res.status(201).send({ message: 'Alumno creado', token });
   } catch (error) {
-    console.error('Error al crear el alumno:', error);
-    res.status(500).send('Error al crear el alumno');
+    console.error('Error al crear el alumno:', {message: error});
+    res.status(500).send({message: 'Error al crear el alumno', error: error});
   }
 }
 
@@ -70,7 +70,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
   } catch (error) {
     console.error('Error al loguear el alumno:', error);
-    res.status(500).send('Error al loguear el alumno');
+    res.status(500).send({message: 'Error al loguear el alumno', error: error});
   }
 }
 
@@ -86,7 +86,7 @@ export const getPuntos = async (req: Request, res: Response): Promise<void> => {
     res.json({ci, puntos });
   } catch (error) {
     console.error('Error al obtener los puntos del alumno:', error);
-    res.status(500).send('Error al obtener los puntos del alumno');
+    res.status(500).send({message: 'Error al obtener los puntos del alumno', error: error});
   }
 }
 
@@ -101,6 +101,6 @@ export const getLeaderBoard = async (req: Request, res: Response): Promise<void>
     res.json(alumnos);
   } catch (error) {
     console.error('Error al obtener el leaderboard:', error);
-    res.status(500).send('Error al obtener el leaderboard');
+    res.status(500).send({message: 'Error al obtener el leaderboard', error: error});
   }
 }
