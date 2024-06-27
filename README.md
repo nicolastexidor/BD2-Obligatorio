@@ -23,7 +23,7 @@ Para configurar y ejecutar este proyecto, sigue los siguientes pasos:
 
 2. Modificar config/db.ts
 
-   En el objeto config cambiar los datos con los que corresponden a tu local
+   En el objeto config cambiar los datos con los que corresponden a tu local, agrega el atributo user y password de ser necesario, correspondiendo a tu usuario de PostgreSQL
 
 3. Compila el código TypeScript a JavaScript ejecutando:
 
