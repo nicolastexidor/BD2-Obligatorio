@@ -2,6 +2,9 @@
 
 Este proyecto es una aplicación en TypeScript que se conecta a una base de datos PostgreSQL para gestionar alumnos y partidos. Utiliza DTOs (Objetos de Transferencia de Datos) para estructurar y transferir datos.
 
+## Documentacion
+En la carpeta Docs del proyecto se puede encontrar tanto la ultima version del informe como las creaciones de tablas e inserts.
+
 ## Instalación
 
 Para configurar y ejecutar este proyecto, sigue los siguientes pasos:
@@ -31,3 +34,21 @@ Para configurar y ejecutar este proyecto, sigue los siguientes pasos:
 Finalmente, ejecuta el archivo compilado:
 
 ```node dist/db.js```
+
+5. Cargar tablas y datos
+En su manejador de bases de datos de preferencia, se deben cargar las tablas e inserts que se encuentran en la carpeta Docs 
+
+5. Clonar Front-End
+   Se debe clonar el repositorio del FrontEnd
+
+6. Instalar dependencias de Front-End
+Al igual que con el Back-End, se deben instalar las dependencias con
+ 
+```npm install```
+
+7. Ejecutar Front-End
+Para ejecutar el Front-End se debe usar el siguiente comando:
+
+```npm start```
+
+Proceda registrando un usuario.
